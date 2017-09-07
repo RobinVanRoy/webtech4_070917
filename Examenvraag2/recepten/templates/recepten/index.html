@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recepten App</title>
+</head>
+<body>
+    <h1>Recepten App</h1>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    <p>Om een recept toe te voegen <a href="{% url 'recepten:create' %}">Klik hier</a></p>
+    <h3>Recepten</h3>
+    {% if recepten %}
+        <ul>
+        {% for recept in recepten %}
+            <li>{{ recept.name }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Geen recepten gevonden</p>
+    {% endif %}
+</body>
+</html>

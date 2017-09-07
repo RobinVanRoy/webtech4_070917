@@ -1,10 +1,9 @@
 from django.conf.urls import url
 from recepten import views
 
-app_name = 'everything'
+app_name = 'recepten'
 urlpatterns = [
-    # ex: everything/  --> listview
-    url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^$', views.index, name='index'),
     # ex: everything/car/1  --> detailview
     url(r'^car/(?P<pk>[0-9]+)/$', views.CarDetailView.as_view(), name='cardetail'),
     # ex: everything/carbrand/1  --> detailview
