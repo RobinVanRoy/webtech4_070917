@@ -1,24 +1,36 @@
-package edu.ap.product;
+package edu.ap.movie;
 import java.io.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.json.*;
-import javax.servlet.ServletContext;
 
-@Path("/products")
-public class ProductResource {
+//import redis.clients.jedis.Jedis; 
+
+@Path("/movies")
+public class MovieResource {
 	
-	private String FILE;
+	private Jedis jedis;
 	
-	public ProductResource(@Context ServletContext servletContext) {
-		FILE = servletContext.getInitParameter("FILE_PATH_PRODUCT");
-		//System.out.println(FILE);
+	public MovieResource() {
+		//Connecting to Redis server on localhost
+		jedis = new Jedis("localhost"); 
+		System.out.println("Connection to server sucessfully"); 
+		//check whether server is running or not 
+		System.out.println("Server is running: "+jedis.ping()); 
 	}
 	
 	@GET
 	@Produces({"text/html"})
 	public String getProductsHTML() {
+		films = jedis.keys('film:*');
+	    film_list = [];
+	    for (var film in films){
+	    	f = jedis.get(film)
+	    	film_list.append(f)
+	    }
+	    film_list.sort();   
+		
 		String htmlString = "<html><body>";		
 		try {
 			JsonReader reader = Json.createReader(new FileInputStream(FILE));
@@ -162,56 +174,4 @@ public class ProductResource {
 		System.out.println(location);
 		return Response.seeOther(location).build();
 	}
-	
-	/*
-	@POST
-	@Consumes({"application/json"})
-	public Response addProduct(String productJSON) {
-		java.net.URI location = null;
-		try {
-			// read existing products
-			InputStream fis = new FileInputStream(FILE);
-	        JsonReader jsonReader1 = Json.createReader(fis);
-	        JsonObject jsonObject = jsonReader1.readObject();
-	        jsonReader1.close();
-	        fis.close();
-	        
-	        JsonReader jsonReader2 = Json.createReader(new StringReader(productJSON));
-	        JsonObject newObject = jsonReader2.readObject();
-	        jsonReader2.close();
-	        
-	        JsonArray array = jsonObject.getJsonArray("products");
-	        JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
-	        
-	        for(int i = 0; i < array.size(); i++){
-	        	// add existing products
-	        	JsonObject obj = array.getJsonObject(i);
-	        	arrBuilder.add(obj);
-	        }
-	        // add new product
-	        arrBuilder.add(newObject);
-	        
-	        // now wrap it in a JSON object
-	        JsonArray newArray = arrBuilder.build();
-	        JsonObjectBuilder builder = Json.createObjectBuilder();
-	        builder.add("products", newArray);
-	        JsonObject newJSON = builder.build();
-
-	        // write to file
-	        OutputStream os = new FileOutputStream(FILE);
-	        JsonWriter writer = Json.createWriter(os);
-	        writer.writeObject(newJSON);
-	        writer.close();
-	        
-	        location = new java.net.URI("/jaxrs/products");
-	        System.out.println(location);
-		} 
-		catch (Exception ex) {
-			System.out.println(location);
-			ex.printStackTrace();
-		}
-		System.out.println(location);
-		return Response.seeOther(location).build();
-	}
-	*/
 }
