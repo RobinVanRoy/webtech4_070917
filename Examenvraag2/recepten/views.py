@@ -46,7 +46,7 @@ def createrecept(request):
     })
 
     collection = db.recepten
-    
+
     recepten = collection.find().sort('$name', -1).sort('$calorien', -1)
     context = {'recepten': recepten}
     return render(request, 'recepten/index.html', context)
