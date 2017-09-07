@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create</title>
+</head>
+<body>
+    <p><a href="{% url 'recepten:index' %}">Home</a></p>
+    <form action="{% url 'recepten:createrecept' %}" method="post">
+        {% csrf_token %}
+        <label>Naam:</label><input type="text" name="input_naam" id="input_naam"/><br>
+        <label>Caloriën:</label><input type="text" name="input_calorien" id="input_calorien"/><br>
+        <label>Tijd:</label><input type="text" name="input_tijd" id="input_tijd"/><br>
+        <label>Ingrediënten:</label><input type="text" name="input_ingredienten" id="input_ingredienten"/><br>
+        <input type="submit" value="Save" />
+    </form>
+</body>
+</html>

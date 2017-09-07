@@ -10,11 +10,11 @@
     <p>Om een recept toe te voegen <a href="{% url 'recepten:create' %}">Klik hier</a></p>
     <h3>Recepten</h3>
     {% if recepten %}
-        <ul>
-        {% for recept in recepten %}
-            <li>{{ recept.name }}</li>
-        {% endfor %}
-        </ul>
+        <table>
+            {% for recept in recepten %}
+                <tr><td>{{ recept.name }}</td><td>Caloriën: {{ recept.calorien }}</td></tr>
+            {% endfor %}
+        </table>
     {% else %}
         <p>Geen recepten gevonden</p>
     {% endif %}
